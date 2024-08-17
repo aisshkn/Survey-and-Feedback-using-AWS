@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Survey Form</title>
+</head>
+<body>
+    <h1>Survey</h1>
+    <form id="surveyForm">
+        <label for="userId">User ID:</label><br>
+        <input type="text" id="userId" name="userId"><br><br>
+        <label for="question1">How satisfied are you with our service?</label><br>
+        <input type="radio" id="q1_very_satisfied" name="question1" value="Very Satisfied">Very Satisfied<br>
+        <input type="radio" id="q1_satisfied" name="question1" value="Satisfied">Satisfied<br>
+        <input type="radio" id="q1_neutral" name="question1" value="Neutral">Neutral<br>
+        <input type="radio" id="q1_dissatisfied" name="question1" value="Dissatisfied">Dissatisfied<br>
+        <input type="radio" id="q1_very_dissatisfied" name="question1" value="Very Dissatisfied">Very Dissatisfied<br><br>
+        <input type="submit" value="Submit">
+</form>
+
+    <script>
+        document.getElementById('surveyForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const response = {
+                SurveyID: '001',
+                UserID: document.getElementById('userId').value,
+                Answers: {
+                    question1: document.querySelector('input[name="question1"]:checked').value
+                }
+            };
+
+            try {
+                const res = await fetch('https://your-api-id.execute-api.region.amazonaws.com/prod/surveys', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(response)
+                });
+
+                const data = await res.json();
+alert(data.message);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+</body>
+</html>
